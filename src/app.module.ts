@@ -5,11 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './features/products/domain/products.entity';
 import { ProductsQueryPipe } from './common/pipes/products.query.pipe';
 import { ProductsQueryRepository } from './features/products/infrostructure/products.query.repository';
+import { ProductsRepository } from './features/products/infrostructure/products.repository';
+import { MulterModule } from '@nestjs/platform-express';
 
 const productProviders: Provider[] = [
   ProductsService,
   ProductsQueryPipe,
   ProductsQueryRepository,
+  ProductsRepository,
 ];
 
 @Module({
@@ -25,6 +28,9 @@ const productProviders: Provider[] = [
       synchronize: true,
     }),
     TypeOrmModule.forFeature([Product]),
+    MulterModule.register({
+      dest: './upload',
+    }),
   ],
   controllers: [ProductsController],
   providers: [...productProviders],
