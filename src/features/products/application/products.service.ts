@@ -15,13 +15,11 @@ export class ProductsService {
     const isExists = await this.productQueryRepository.getByName(product.name);
     if (isExists) return -1;
     const newProduct = new Product(product.name, product.price, product.count);
-    const result: Product | false =
-      await this.productRepository.create(newProduct);
-    return result;
+    return await this.productRepository.create(newProduct);
   }
   async delete(id: string) {
-    if (fs.existsSync('upload/' + id)) {
-      fs.unlinkSync('upload/' + id);
+    if (fs.existsSync('upload/' + id + '.png')) {
+      fs.unlinkSync('upload/' + id + '.png');
     }
     return this.productRepository.delete(id);
   }
@@ -34,10 +32,10 @@ export class ProductsService {
       fs.unlinkSync(file.path);
       return false;
     }
-    if (fs.existsSync('upload/' + id)) {
-      fs.unlinkSync('upload/' + id);
+    if (fs.existsSync('upload/' + id + '.png')) {
+      fs.unlinkSync('upload/' + id + '.png');
     }
-    fs.renameSync(file.path, 'upload/' + id);
+    fs.renameSync(file.path, 'upload/' + id + '.png');
     return true;
   }
 }

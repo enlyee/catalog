@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ConfigurationType } from './settings/configuration';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,12 +12,16 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Catalog API')
     .setDescription('by enlyee')
-    //.setVersion('1.0')
-    //.addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+  const configService = app.get(ConfigService<ConfigurationType, true>);
+  const apiSettings = configService.get('apiSettings', { infer: true });
+  const port = apiSettings.PORT;
+
+  await app.listen(port, () => {
+    console.log('App starting listen port: ', port);
+  });
 }
 bootstrap();

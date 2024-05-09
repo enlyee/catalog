@@ -15,6 +15,7 @@ describe('ProductsController (e2e)', () => {
     await app.init();
     await request(app.getHttpServer()).delete('/testing/all-data');
   });
+
   afterAll(async () => {
     await Promise.all([app.close()]);
   });

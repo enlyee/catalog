@@ -42,8 +42,7 @@ export class ProductsController {
   async getAll(
     @Query(ProductsQueryPipe) query: ProductsQueryInputFixedModel,
   ): Promise<ProductsQueryOutputModel> {
-    const output = this.productsQueryRepository.getAll(query);
-    return output;
+    return this.productsQueryRepository.getAll(query);
   }
 
   @ApiOperation({ summary: 'Get product by id' })
@@ -102,7 +101,7 @@ export class ProductsController {
           fileType: 'png',
         })
         .addMaxSizeValidator({
-          maxSize: 10000000, // just to you know it's possible.
+          maxSize: 10000000,
         })
         .build({
           exceptionFactory(error) {

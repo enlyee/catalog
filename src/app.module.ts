@@ -8,6 +8,8 @@ import { ProductsQueryRepository } from './features/products/infrostructure/prod
 import { ProductsRepository } from './features/products/infrostructure/products.repository';
 import { MulterModule } from '@nestjs/platform-express';
 import { Testing } from './features/testing/delete.all.data';
+import configuration from './settings/configuration';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 const productProviders: Provider[] = [
   ProductsService,
@@ -18,15 +20,14 @@ const productProviders: Provider[] = [
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'sa',
-      database: 'catalog',
-      autoLoadEntities: true,
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+    }),
+    TypeOrmModule.forRootAsync({
+      useFactory: (configService: ConfigService) =>
+        configService.get('typeOrmConfig'),
+      inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([Product]),
     MulterModule.register({
