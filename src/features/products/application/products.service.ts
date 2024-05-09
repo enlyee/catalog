@@ -20,7 +20,9 @@ export class ProductsService {
     return result;
   }
   async delete(id: string) {
-    fs.unlinkSync('upload/' + id);
+    if (fs.existsSync('upload/' + id)) {
+      fs.unlinkSync('upload/' + id);
+    }
     return this.productRepository.delete(id);
   }
   async update(id: string, updateData: ProductInputModel) {

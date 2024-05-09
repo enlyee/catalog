@@ -7,6 +7,7 @@ import { ProductsQueryPipe } from './common/pipes/products.query.pipe';
 import { ProductsQueryRepository } from './features/products/infrostructure/products.query.repository';
 import { ProductsRepository } from './features/products/infrostructure/products.repository';
 import { MulterModule } from '@nestjs/platform-express';
+import { Testing } from './features/testing/delete.all.data';
 
 const productProviders: Provider[] = [
   ProductsService,
@@ -32,7 +33,7 @@ const productProviders: Provider[] = [
       dest: './upload',
     }),
   ],
-  controllers: [ProductsController],
+  controllers: [ProductsController, Testing],
   providers: [...productProviders],
 })
 export class AppModule {}
