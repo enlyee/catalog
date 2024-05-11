@@ -1,12 +1,15 @@
 import { Controller, Delete } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Product } from '../products/domain/products.entity';
 
 @Controller('testing/all-data')
 export class Testing {
-  constructor(@InjectDataSource() private readonly rep: DataSource) {}
+  constructor(
+    @InjectRepository(Product) private readonly rep: Repository<Product>,
+  ) {}
   @Delete('')
   async deleteAll() {
-    await this.rep.query('DELETE FROM public.product');
+    await this.rep.delete({});
   }
 }
